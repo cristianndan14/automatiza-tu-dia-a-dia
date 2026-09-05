@@ -22,17 +22,19 @@ jobs:
 
       - name: Correr el pipeline
         env:
-          IMAP_HOST: ${{ secrets.IMAP_HOST }}
-          IMAP_USER: ${{ secrets.IMAP_USER }}
-          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
-          IMAP_ASUNTO_FILTRO: ${{ secrets.IMAP_ASUNTO_FILTRO }}
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          EMAIL_USER: ${{ secrets.EMAIL_USER }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          EMAIL_DESTINATARIO: ${{ secrets.EMAIL_DESTINATARIO }}
-          EMAIL_SOPORTE: ${{ secrets.EMAIL_SOPORTE }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
-          GEMINI_MAX_OUTPUT_TOKENS: ${{ secrets.GEMINI_MAX_OUTPUT_TOKENS }}
+          # Cada valor puede estar cargado como Secret o como Variable del
+          # repo -- se busca primero en secrets y, si no está, en vars.
+          IMAP_HOST: ${{ secrets.IMAP_HOST || vars.IMAP_HOST }}
+          IMAP_USER: ${{ secrets.IMAP_USER || vars.IMAP_USER }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || vars.IMAP_PASSWORD }}
+          IMAP_ASUNTO_FILTRO: ${{ secrets.IMAP_ASUNTO_FILTRO || vars.IMAP_ASUNTO_FILTRO }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST || vars.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT || vars.SMTP_PORT }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER || vars.EMAIL_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD || vars.EMAIL_PASSWORD }}
+          EMAIL_DESTINATARIO: ${{ secrets.EMAIL_DESTINATARIO || vars.EMAIL_DESTINATARIO }}
+          EMAIL_SOPORTE: ${{ secrets.EMAIL_SOPORTE || vars.EMAIL_SOPORTE }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || vars.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ secrets.GEMINI_MODEL || vars.GEMINI_MODEL }}
+          GEMINI_MAX_OUTPUT_TOKENS: ${{ secrets.GEMINI_MAX_OUTPUT_TOKENS || vars.GEMINI_MAX_OUTPUT_TOKENS }}
         run: python pipeline_email_normalizacion.py
