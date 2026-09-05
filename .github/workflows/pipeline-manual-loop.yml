@@ -1,0 +1,48 @@
+name: Pipeline de normalización y reporte (manual, en loop)
+
+# Se dispara solo a mano. Corre el pipeline hasta 15 veces seguidas,
+# con una pausa de 60s entre cada corrida, dentro del mismo job.
+on:
+  workflow_dispatch: {}
+
+jobs:
+  ejecutar-pipeline-loop:
+    runs-on: ubuntu-latest
+    environment: pipeline
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Correr el pipeline hasta 15 veces (60s entre corridas)
+        env:
+          # Cada valor puede estar cargado como Secret o como Variable del
+          # repo -- se busca primero en secrets y, si no está, en vars.
+          IMAP_HOST: ${{ secrets.IMAP_HOST || vars.IMAP_HOST }}
+          IMAP_USER: ${{ secrets.IMAP_USER || vars.IMAP_USER }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || vars.IMAP_PASSWORD }}
+          IMAP_ASUNTO_FILTRO: ${{ secrets.IMAP_ASUNTO_FILTRO || vars.IMAP_ASUNTO_FILTRO }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST || vars.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT || vars.SMTP_PORT }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER || vars.EMAIL_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD || vars.EMAIL_PASSWORD }}
+          EMAIL_DESTINATARIO: ${{ secrets.EMAIL_DESTINATARIO || vars.EMAIL_DESTINATARIO }}
+          EMAIL_SOPORTE: ${{ secrets.EMAIL_SOPORTE || vars.EMAIL_SOPORTE }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || vars.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ secrets.GEMINI_MODEL || vars.GEMINI_MODEL }}
+          GEMINI_MAX_OUTPUT_TOKENS: ${{ secrets.GEMINI_MAX_OUTPUT_TOKENS || vars.GEMINI_MAX_OUTPUT_TOKENS }}
+        run: |
+          for i in $(seq 1 15); do
+            echo "=== Corrida $i/15 ==="
+            python pipeline_email_normalizacion.py
+            if [ "$i" -lt 15 ]; then
+              sleep 60
+            fi
+          done
