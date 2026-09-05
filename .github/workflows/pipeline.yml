@@ -1,5 +1,7 @@
 name: Pipeline de normalización y reporte
 
+# Nota: cada push que toque este archivo re-registra el trigger de
+# schedule en GitHub, lo cual puede acelerar que arranque a disparar.
 on:
   schedule:
     - cron: '*/5 * * * *'
