@@ -99,7 +99,7 @@ Los archivos que genera en cada corrida quedan en `/tmp/pipeline_salida/` (datas
 
 El workflow `.github/workflows/pipeline.yml` corre el pipeline solo, sin depender de tu máquina:
 
-- **`schedule`** con cron `*/5 * * * *` → lo dispara automáticamente cada 5 minutos.
+- **`schedule`** con cron `*/6 * * * *` → lo dispara automáticamente cada 6 minutos.
 - **`workflow_dispatch`** → agrega el botón "Run workflow" en la pestaña **Actions** del repo en GitHub, para correrlo a mano cuando quieras.
 
 Para que funcione, el `.env` no viaja al repo (está en `.gitignore`), así que hay que cargar las mismas variables como **secrets** del repositorio:
