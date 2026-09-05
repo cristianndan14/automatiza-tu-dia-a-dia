@@ -2,9 +2,12 @@ name: Pipeline de normalización y reporte
 
 # Nota: cada push que toque este archivo re-registra el trigger de
 # schedule en GitHub, lo cual puede acelerar que arranque a disparar.
+#
+# El cron de GitHub Actions corre en UTC. La hora de abajo (13:03 UTC)
+# equivale a las 10:03am en Argentina (UTC-3, sin horario de verano).
 on:
   schedule:
-    - cron: '*/6 * * * *'
+    - cron: '3 13 * * *'
   workflow_dispatch: {}
 
 jobs:
