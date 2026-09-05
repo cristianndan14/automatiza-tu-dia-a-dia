@@ -8,6 +8,7 @@ on:
 jobs:
   ejecutar-pipeline:
     runs-on: ubuntu-latest
+    environment: pipeline
     steps:
       - name: Descargar el código
         uses: actions/checkout@v4
